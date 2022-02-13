@@ -1,0 +1,180 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+// MODEL AUTH
+model auth{
+  id                            Int           @id @default(autoincrement())
+  api_id                        String
+  api_secret                    String
+}
+
+// MODEL USERS
+model Users{
+  id                            Int           @id @default(autoincrement())
+  email                         String        @unique
+  password                      String
+  createdAt                     DateTime      @default(now())
+  updatedAt                     DateTime      @updatedAt
+
+  //relasi
+  profile                       Profile?
+  avatar                        Avatar?
+  product_review                ProductReview[]
+  order                         Order[]
+}
+
+// MODEL PROFILE
+model Profile{
+  id                            Int           @id @default(autoincrement())
+  full_name                     String        @unique
+  phone                         String        @unique
+  address                       String
+  bio                           String
+  bod                           DateTime      @default(now())
+  user_id                       Int           @unique
+  createdAt                     DateTime      @default(now())
+  updatedAt                     DateTime      @updatedAt
+
+  //relasi
+  user                          Users         @relation(fields: [user_id], references: [id], onDelete: Cascade)
+}
+
+// MODEL AVATAR
+model Avatar{
+  id                            Int           @id @default(autoincrement())
+  user_id                       Int           @unique
+  filename                      String
+  mime_type                     String
+  image_path                    String
+  createdAt                     DateTime      @default(now())
+  updatedAt                     DateTime      @updatedAt
+
+  //relasi
+  user                          Users         @relation(fields: [user_id], references: [id], onDelete: Cascade)
+}
+
+// MODEL CATEGORIES
+model Categories{
+  id                            Int           @id @default(autoincrement())
+  name                          String        @unique
+  description                   String
+  createdAt                     DateTime      @default(now())
+  updatedAt                     DateTime      @updatedAt
+
+  //relasi
+  sub_category                  Sub_Categories?
+  product                       Products[]
+}
+
+// MODEL SUB_CATEGORIES 
+model Sub_Categories{
+  id                            Int           @id @default(autoincrement())
+  name                          String        @unique
+  category_id                   Int           @unique
+  createdAt                     DateTime      @default(now())
+  updatedAt                     DateTime      @updatedAt
+
+  //relasi
+  category                      Categories    @relation(fields: [category_id], references: [id], onDelete: Cascade)
+}
+
+// MODEL PRODUCTS 
+model Products{
+  id                            Int           @id @default(autoincrement())
+  name                          String
+  price                         Int
+  size                          String
+  description                   String
+  category_id                   Int           
+  createdAt                     DateTime      @default(now())
+  updatedAt                     DateTime      @updatedAt
+
+  //relasi
+  category                      Categories    @relation(fields: [category_id], references: [id], onDelete: Cascade)
+
+  product_images                Product_images[]
+  product_review                ProductReview[]
+  discount                      Discount[]
+  order                         Order[]
+} 
+
+// MODEL PRODUCT_IMAGES 
+model Product_images{
+  id                            Int           @id @default(autoincrement())
+  filename                      String
+  image_path                    String
+  mime_type                     String
+  product_id                    Int   
+  createdAt                     DateTime      @default(now())
+  updatedAt                     DateTime      @updatedAt       
+
+  //relasi
+  product                       Products      @relation(fields: [product_id], references: [id], onDelete: Cascade)
+}
+
+// MODEL PRODUCT_REVIEW 
+model ProductReview{
+  id                            Int           @id @default(autoincrement())
+  product_id                    Int           
+  user_id                       Int           @unique
+  body                          String
+  createdAt                     DateTime      @default(now())
+  updatedAt                     DateTime      @updatedAt
+
+  //relasi
+  product                       Products      @relation(fields: [product_id], references: [id], onDelete: Cascade)
+  user                          Users         @relation(fields: [user_id], references: [id], onDelete: Cascade)
+}
+
+// MODEL DISCOUNT 
+model Discount{
+  id                            Int           @id @default(autoincrement())
+  product_id                    Int           
+  expired                       DateTime?
+  percentage                    Int
+  createdAt                     DateTime      @default(now())
+  updatedAt                     DateTime      @updatedAt
+
+  //relasi
+  product                       Products      @relation(fields: [product_id], references: [id], onDelete: Cascade)
+}
+
+// MODEL ORDER 
+model Order{
+  id                            Int           @id @default(autoincrement())
+  product_id                    Int           
+  qty                           Int
+  user_id                       Int           
+  orderStatus                   String
+  shipping                      String
+  address                       String
+
+  //relasi
+  product                       Products      @relation(fields: [product_id], references: [id], onDelete: Cascade)
+  
+  user                          Users         @relation(fields: [user_id], references: [id], onDelete: Cascade)
+
+  payment                       Payment[]
+}
+
+// MODEL PAYMENT 
+model Payment{
+  id                            Int           @id @default(autoincrement())
+  total                         Int
+  status                        Boolean
+  method                        String
+  order_id                      Int           
+  
+
+  //relasi
+  order                         Order         @relation(fields: [order_id], references: [id], onDelete: Cascade)
+}
