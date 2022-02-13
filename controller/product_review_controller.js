@@ -62,7 +62,7 @@ product_review_controller.put("/product_review_update/:id", async(req,res)=>{
         })
 
         if(!findId){
-            res.status(401).json({
+            res.status(404).json({
                 success : false,
                 msg : "data review tidak ditemukan"
             })
@@ -105,7 +105,7 @@ product_review_controller.delete("/product_review_delete/:id ", async(req,res)=>
         })
 
         if(!findId){
-            res.status(401).json({
+            res.status(404).json({
                 success : false,
                 msg : "data review tidak ditemukan"
             })

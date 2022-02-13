@@ -63,7 +63,7 @@ categories_controller.put("/categories_update/:id", async(req,res)=>{
         })
 
         if(!findId){
-            res.status(401).json({
+            res.status(404).json({
                 success : false,
                 msg : "data categories tidak ditemukan"
             })
@@ -104,7 +104,7 @@ categories_controller.delete("/categories_delete/:id", async(req,res)=>{
         })
 
         if(!findId){
-            res.status(401).json({
+            res.status(404).json({
                 success : false,
                 msg : "data categories tidak ditemukan"
             })

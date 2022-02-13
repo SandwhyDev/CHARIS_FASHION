@@ -55,7 +55,7 @@ payment_controller.put("/payment_update/:id", async(req, res)=>{
         })
 
         if(!findId){
-            res.status(401).json({
+            res.status(404).json({
                 success : false,
                 msg : "data payment tidak ditemukan"
             })
@@ -98,7 +98,7 @@ payment_controller.delete("/payment_delete/:id", async(req,res)=>{
         })
 
         if(!findId){
-            res.status(401).json({
+            res.status(404).json({
                 success : false,
                 msg : "data payment tidak ditemukan"
             })

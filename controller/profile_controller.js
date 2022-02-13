@@ -56,7 +56,7 @@ profile_controller.put("/profile_update/:id", async(req,res)=>{
         })
 
         if(!findId){
-            res.status(401).json({
+            res.status(404).json({
                 success : false,
                 msg : "data profile tidak ditemukan"
             })
@@ -102,7 +102,7 @@ profile_controller.delete("/profile_delete/:id", async(req,res)=>{
         })
 
         if(!findId){
-            res.status(401).json({
+            res.status(404).json({
                 success : false,
                 msg : "data profile tidak ditemukan"
             })

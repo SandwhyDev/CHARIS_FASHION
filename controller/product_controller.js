@@ -115,7 +115,7 @@ product_controller.put("/product_update/:id", async (req, res) => {
     });
 
     if (!findId) {
-      res.status(401).json({
+      res.status(404).json({
         success: false,
         msg: "data product tidak ditemukan",
       });
@@ -159,7 +159,7 @@ product_controller.delete("/product_delete/:id", async (req, res) => {
     });
 
     if (!findId) {
-      res.status(401).json({
+      res.status(404).json({
         success: false,
         msg: "data product tidak ditemukan",
       });

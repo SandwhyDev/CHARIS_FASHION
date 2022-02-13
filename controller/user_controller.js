@@ -76,7 +76,7 @@ user_controller.post("/users_login", async (req, res) => {
     });
 
     if (!result) {
-      res.status(401).json({
+      res.status(404).json({
         success: false,
         msg: "email salah",
       });
@@ -178,7 +178,7 @@ user_controller.put("/users_update/:id", user_auth_check, async (req, res) => {
     });
 
     if (!findUser) {
-      res.status(401).json({
+      res.status(404).json({
         success: false,
         msg: "data user tidak ditemukan",
       });

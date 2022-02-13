@@ -95,7 +95,7 @@ order_controller.put("/order_update/:id", async(req, res)=>{
         })
 
         if(!findId){
-            res.status(401).json({
+            res.status(404).json({
                 success : false,
                 msg : "data order tidak ditemukan"
             })
@@ -140,7 +140,7 @@ order_controller.delete("/order_delete/:id", async(req, res)=>{
         })
 
         if(!findId){
-            res.status(401).json({
+            res.status(404).json({
                 success : false,
                 msg : "data order tidak ditemukan"
             })

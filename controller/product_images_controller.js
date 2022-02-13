@@ -82,7 +82,7 @@ product_image_controller.delete(
       });
 
       if (!findId) {
-        res.status(401).json({
+        res.status(404).json({
           success: false,
           msg: "data product tidak ada",
         });

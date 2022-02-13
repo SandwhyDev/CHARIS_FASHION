@@ -54,7 +54,7 @@ sub_categories_controller.put("/sub_categories_update/:id", async(req, res)=>{
         })
 
         if(!findId){
-            res.status(401).json({
+            res.status(404).json({
                 success : false,
                 msg : "data sub categories tidak ditemukan"
             })
@@ -95,7 +95,7 @@ sub_categories_controller.delete("/sub_categories_delete/:id", async(req,res)=>{
         })
 
         if(!findId){
-            res.status(401).json({
+            res.status(404).json({
                 success : false,
                 msg : "data sub categories tidak ditemukan"
             })

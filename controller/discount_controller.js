@@ -59,7 +59,7 @@ discount_controller.put("/discount_update/:id", async(req,res)=>{
         })
 
         if(!findId){
-            res.status(401).json({
+            res.status(404).json({
                 success : false,
                 msg : "data discount tidak ditemukan"
             })
@@ -101,7 +101,7 @@ discount_controller.delete("/discount_delete/:id", async(req,res)=>{
         })
 
         if(!findId){
-            res.status(401).json({
+            res.status(404).json({
                 success : false,
                 msg : "data discount tidak ditemukan"
             })

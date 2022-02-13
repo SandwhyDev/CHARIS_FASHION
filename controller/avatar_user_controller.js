@@ -132,16 +132,16 @@ avatar_user_controller.put("/avatar_user_update/:id", avatar_user.single("avatar
 // AVATAR DELETE 
 avatar_user_controller.delete("/avatar_user_delete/:id", async(req,res)=>{
   try {
-    const findId = await ps.users.findUnique({
+    const findUser = await ps.users.findUnique({
       where: {
-        id: parseInt(data.user_id),
+        id: parseInt(req.params.id),
       },
       include : {
         avatar : true
       }
     });
 
-    if(!findId) {
+    if(!findUser) {
       res.status(404).json({
         success: false,
         msg: "data tidak ditemukan",
