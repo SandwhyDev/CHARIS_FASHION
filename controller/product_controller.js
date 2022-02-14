@@ -14,6 +14,21 @@ product_controller.post(
     try {
       const data = await req.body;
       const file = await req.files;
+
+      const findCategories = await ps.categories.findUnique({
+        where: {
+          id: parseInt(data.category_id),
+        },
+      });
+
+      if (!findCategories) {
+        res.status(401).json({
+          success: false,
+          msg: "category tidak ditemukan",
+        });
+        return;
+      }
+
       const result = await ps.products.create({
         data: {
           name: data.name,
@@ -23,10 +38,6 @@ product_controller.post(
           category_id: parseInt(data.category_id),
         },
       });
-
-      //   const makeDir = await fs.mkdirSync(
-      //     path.join(__dirname, `../static/uploads/product_images/${result.name}`)
-      //   );
 
       const images_result = await file.forEach((e) => {
         ps.product_images
@@ -68,6 +79,7 @@ product_controller.get("/product_read", async (req, res) => {
   try {
     const result = await ps.products.findMany({
       include: {
+        order: true,
         product_review: {
           select: {
             user_id: true,
@@ -178,31 +190,11 @@ product_controller.delete("/product_delete/:id", async (req, res) => {
       },
     });
 
-    // DELETE FILES WITH FS UNCLEAR
-    const delete_img = await fs.unlinkSync(
-      path.join(
-        __dirname,
-        `../static/uploads/upload_images/${result.product_images.forEach(
-          (e) => {
-            ps.product_images
-              .findMany({
-                where: {
-                  product_id: parseInt(req.params.id),
-                },
-                // select: {
-                //   filename: e.filename,
-                // },
-              })
-              .then((response) => {
-                console.log(response);
-              })
-              .catch((err) => {
-                console.log(err);
-              });
-          }
-        )}`
-      )
-    );
+    const removeAllImages = await result.product_images.forEach((e) => {
+      fs.unlinkSync(
+        path.join(__dirname, `../static/uploads/product_images/${e.filename}`)
+      );
+    });
 
     res.status(201).json({
       success: true,
