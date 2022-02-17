@@ -93,26 +93,38 @@ user_controller.post("/users_login", async (req, res) => {
       return;
     }
 
-    var cookieDate = new Date(moment().add(30, "m").toDate());
+    // var cookieDate = new Date(moment().add(30, "m").toDate());
 
-    res.cookie(
-      "_user",
-      jwt.sign(
-        {
-          email: result.email,
-          id: result.id,
-        },
-        process.env.API_SECRET
-      ),
+    // res.cookie(
+    //   "_user",
+    //   jwt.sign(
+    //     {
+    //       email: result.email,
+    //       id: result.id,
+    //     },
+    //     process.env.API_SECRET
+    //   ),
+    //   {
+    //     expires: cookieDate,
+    //     httpOnly: true,
+    //   }
+    // );
+    const reqDate = moment().format("DD-MM-YYYY hh:mm:ss");
+
+    const token = jwt.sign(
       {
-        expires: cookieDate,
-        httpOnly: true,
-      }
+        app_name: "charisfashion",
+        user_id: result.id,
+        user_email: result.email,
+        req_date: reqDate,
+      },
+      process.env.API_SECRET
     );
 
     res.status(200).json({
       success: true,
       msg: "berhasil login",
+      token: token,
     });
   } catch (error) {
     res.status(500).json({
