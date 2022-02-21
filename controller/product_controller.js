@@ -45,10 +45,7 @@ product_controller.post(
             data: {
               filename: e.filename,
               mime_type: e.mimetype,
-              image_path: path.join(
-                __dirname,
-                `../static/uploads/product_images/${e.filename}`
-              ),
+              image_path: `/static/uploads/product_images/${e.filename}`,
               product_id: result.id,
             },
           })
@@ -77,7 +74,14 @@ product_controller.post(
 // PRODUCT READ
 product_controller.get("/product_read", async (req, res) => {
   try {
+    const { page = 1, limit = 10 } = await req.query;
+    const skip = (page - 1) * limit;
+
     const result = await ps.products.findMany({
+      skip: parseInt(skip),
+      orderBy: {
+        id: "desc",
+      },
       include: {
         order: true,
         product_review: {
@@ -104,8 +108,13 @@ product_controller.get("/product_read", async (req, res) => {
       },
     });
 
+    const countBlog = await ps.products.count();
+
     res.status(200).json({
       success: true,
+      current_page: parseInt(page),
+      total_page: Math.ceil(countBlog / limit),
+      total_data: parseInt(countBlog),
       query: result,
     });
   } catch (error) {

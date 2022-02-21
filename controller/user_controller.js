@@ -9,6 +9,7 @@ import moment from "moment";
 import user_auth_check from "../services/user_auth_cek";
 env.config();
 import fs from "fs";
+import { jwtSign } from "../services/jwt";
 
 const user_controller = express.Router();
 
@@ -93,26 +94,35 @@ user_controller.post("/users_login", async (req, res) => {
       return;
     }
 
-    var cookieDate = new Date(moment().add(30, "m").toDate());
+    // var cookieDate = new Date(moment().add(30, "m").toDate());
 
-    res.cookie(
-      "_user",
-      jwt.sign(
-        {
-          email: result.email,
-          id: result.id,
-        },
-        process.env.API_SECRET
-      ),
-      {
-        expires: cookieDate,
-        httpOnly: true,
-      }
-    );
+    // res.cookie(
+    //   "_user",
+    //   jwt.sign(
+    //     {
+    //       email: result.email,
+    //       id: result.id,
+    //     },
+    //     process.env.API_SECRET
+    //   ),
+    //   {
+    //     expires: cookieDate,
+    //     httpOnly: true,
+    //   }
+    // );
 
     res.status(200).json({
       success: true,
       msg: "berhasil login",
+      token: jwtSign(
+        {
+          app_name: "charisfashion",
+          user_id: result.id,
+          user_email: result.email,
+          req_date: moment().toLocaleString(),
+        },
+        process.env.API_SECRET
+      ),
     });
   } catch (error) {
     res.status(500).json({
@@ -123,7 +133,7 @@ user_controller.post("/users_login", async (req, res) => {
 });
 
 // USER LOGOUT
-user_controller.get("/users_logout", user_auth_check, async (req, res) => {
+user_controller.get("/users_logout", async (req, res) => {
   try {
     res.clearCookie("_user");
     res.status(201).json({
@@ -139,7 +149,7 @@ user_controller.get("/users_logout", user_auth_check, async (req, res) => {
 });
 
 // USER READ
-user_controller.get("/users_read", user_auth_check, async (req, res) => {
+user_controller.get("/users_read", async (req, res) => {
   try {
     const result = await ps.users.findMany({
       include: {
@@ -167,7 +177,7 @@ user_controller.get("/users_read", user_auth_check, async (req, res) => {
 });
 
 // USER UPDATE
-user_controller.put("/users_update/:id", user_auth_check, async (req, res) => {
+user_controller.put("/users_update/:id", async (req, res) => {
   try {
     const data = await req.body;
     const { oldPassword } = await req.body;

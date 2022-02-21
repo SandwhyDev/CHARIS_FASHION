@@ -1,6 +1,6 @@
 import express from "express";
-import cors from "cors"
-import env from "dotenv"
+import cors from "cors";
+import env from "dotenv";
 import cookieParser from "cookie-parser";
 import user_controller from "./controller/user_controller";
 import profile_controller from "./controller/profile_controller";
@@ -16,39 +16,35 @@ import moment from "moment";
 import product_image_controller from "./controller/product_images_controller";
 import avatar_user_controller from "./controller/avatar_user_controller";
 
-env.config()
+env.config();
 
-
-const app = express()
-const PORT = process.env.PORT
-const time = moment().format("LTS")
+const app = express();
+const PORT = process.env.PORT;
+const time = moment().format("LTS");
 
 //middleware
-app.use(cors())
-app.use(express.json({limit : "100mb"}))
-app.use(express.urlencoded({extended : false}))
-app.use(cookieParser())
+app.use(cors());
+app.use(express.json({ limit: "100mb" }));
+app.use(express.urlencoded({ extended: false }));
+app.use(cookieParser());
 
 //routes
-app.use("/api", user_controller)
-app.use("/api", avatar_user_controller)
-app.use("/api", profile_controller)
-app.use("/api", categories_controller)
-app.use("/api", sub_categories_controller)
-app.use("/api", product_controller)
-app.use("/api", product_image_controller)
-app.use("/api", product_review_controller)
-app.use("/api", discount_controller)
-app.use("/api", order_controller)
-app.use("/api", payment_controller)
-app.use("/api", auth)
-
-
-
+app.use("/api", user_controller);
+app.use("/api", avatar_user_controller);
+app.use("/api", profile_controller);
+app.use("/api", categories_controller);
+app.use("/api", sub_categories_controller);
+app.use("/api", product_controller);
+app.use("/api", product_image_controller);
+app.use("/api", product_review_controller);
+app.use("/api", discount_controller);
+app.use("/api", order_controller);
+app.use("/api", payment_controller);
+app.use("/api", auth);
 
 //listener
-app.listen(PORT,()=>{
-    console.log(`
+app.listen(PORT, () => {
+  console.log(`
     
 
     > LISTENED TO PORT ${PORT} 
@@ -56,4 +52,4 @@ app.listen(PORT,()=>{
     >> waktu : ${time}
 
     `);
-})
+});
