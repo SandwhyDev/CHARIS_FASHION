@@ -1,9 +1,8 @@
 import express from "express";
 import env from "dotenv";
 env.config();
-import jwt, { sign } from "jsonwebtoken";
 import moment from "moment";
-import ps from "../prisma/connection";
+import { jwtSign } from "../services/jwt";
 
 const auth = express.Router();
 
@@ -30,12 +29,10 @@ auth.post("/get_auth", async (req, res) => {
       return;
     }
 
-    const token = jwt.sign(
-      {
-        app_name: "charisfashion",
-      },
-      process.env.API_SECRET
-    );
+    const token = jwtSign({
+      app_name: "charisfashion",
+      req_date: moment().format("DD:MM:YYYY hh:mm:ss"),
+    });
 
     // var cookieDate = new Date(moment().add(30, "m").toDate())
 

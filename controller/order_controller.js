@@ -33,37 +33,19 @@ order_controller.post("/order_create/:id", async (req, res) => {
         orderStatus: data.orderStatus,
         shipping: data.shipping,
         address: data.address,
+        payment: {
+          create: {
+            total: parseInt(findProduct.price),
+            status: false,
+            method: data.method,
+          },
+        },
       },
     });
 
     res.status(201).json({
       success: true,
       msg: "berhasil buat order",
-    });
-  } catch (error) {
-    res.status(500).json({
-      success: false,
-      error: error.message,
-    });
-  }
-});
-
-// CEK QTY
-order_controller.get("/cekQtyProduct/:id", async (req, res) => {
-  try {
-    const findQty = await ps.products.findMany({
-      where: {
-        id: parseInt(req.params.id),
-      },
-      select: {
-        price: true,
-      },
-    });
-
-    res.status(201).json({
-      success: true,
-      // query : result,
-      price: findQty,
     });
   } catch (error) {
     res.status(500).json({
