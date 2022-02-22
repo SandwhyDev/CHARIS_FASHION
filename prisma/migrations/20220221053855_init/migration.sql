@@ -113,11 +113,13 @@ CREATE TABLE "Order" (
     "product_id" INTEGER NOT NULL,
     "qty" INTEGER NOT NULL,
     "user_id" INTEGER NOT NULL,
+    "discount_id" INTEGER NOT NULL,
     "orderStatus" TEXT NOT NULL,
     "shipping" TEXT NOT NULL,
     "address" TEXT NOT NULL,
     CONSTRAINT "Order_user_id_fkey" FOREIGN KEY ("user_id") REFERENCES "Users" ("id") ON DELETE CASCADE ON UPDATE CASCADE,
-    CONSTRAINT "Order_product_id_fkey" FOREIGN KEY ("product_id") REFERENCES "Products" ("id") ON DELETE CASCADE ON UPDATE CASCADE
+    CONSTRAINT "Order_product_id_fkey" FOREIGN KEY ("product_id") REFERENCES "Products" ("id") ON DELETE CASCADE ON UPDATE CASCADE,
+    CONSTRAINT "Order_discount_id_fkey" FOREIGN KEY ("discount_id") REFERENCES "Discount" ("id") ON DELETE CASCADE ON UPDATE CASCADE
 );
 
 -- CreateTable

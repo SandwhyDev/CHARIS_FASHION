@@ -94,22 +94,24 @@ user_controller.post("/users_login", async (req, res) => {
       return;
     }
 
-    // var cookieDate = new Date(moment().add(30, "m").toDate());
+    var cookieDate = new Date(moment().add(30, "m").toDate());
 
-    // res.cookie(
-    //   "_user",
-    //   jwt.sign(
-    //     {
-    //       email: result.email,
-    //       id: result.id,
-    //     },
-    //     process.env.API_SECRET
-    //   ),
-    //   {
-    //     expires: cookieDate,
-    //     httpOnly: true,
-    //   }
-    // );
+    res.cookie(
+      "_user",
+      jwtSign(
+        {
+          app_name: "charisfashion",
+          user_id: result.id,
+          user_email: result.email,
+          req_date: moment().format("DD:MM:YYYY hh:mm:ss"),
+        },
+        process.env.API_SECRET
+      ),
+      {
+        expires: cookieDate,
+        httpOnly: true,
+      }
+    );
 
     res.status(200).json({
       success: true,
@@ -119,7 +121,7 @@ user_controller.post("/users_login", async (req, res) => {
           app_name: "charisfashion",
           user_id: result.id,
           user_email: result.email,
-          req_date: moment().toLocaleString(),
+          req_date: moment().format("DD:MM:YYYY hh:mm:ss"),
         },
         process.env.API_SECRET
       ),

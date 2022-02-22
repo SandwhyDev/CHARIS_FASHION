@@ -4,17 +4,17 @@ import ps from "../prisma/connection";
 const order_controller = express.Router();
 
 // ORDER CREATE
-order_controller.post("/order_create/:id", async (req, res) => {
+order_controller.post("/order_create", async (req, res) => {
   try {
     const data = await req.body;
 
     const findProduct = await ps.products.findUnique({
       where: {
-        id: parseInt(req.params.id),
+        id: parseInt(data.product_id),
       },
       select: {
         price: true,
-      },
+      }
     });
 
     if (!findProduct) {
@@ -25,17 +25,44 @@ order_controller.post("/order_create/:id", async (req, res) => {
       return;
     }
 
+    const findDiscount = await ps.discount.findUnique({
+      where : {
+        id : parseInt(data.discount_id)
+      },
+      select : {
+        percentage : true
+      }
+    })
+
+    if (!findDiscount) {
+      res.status(404).json({
+        success: false,
+        msg: "discount tidak ditemukan",
+      });
+      return;
+    }
+
+    console.log(findDiscount.percentage);
+  
+
+    const qtyAfterDiscount = await findProduct.price - (findProduct.price * findDiscount.percentage / 100)
+
+
     const result = await ps.order.create({
       data: {
-        product_id: parseInt(req.params.id),
+        product_id: parseInt(data.product_id),
         qty: parseInt(findProduct.price),
+        // discount : parseInt(findDiscount.percentage),
+        qty_after_discount : parseInt(qtyAfterDiscount),
         user_id: parseInt(data.user_id),
         orderStatus: data.orderStatus,
         shipping: data.shipping,
         address: data.address,
+
+        //PAYMENT LANGSUNG DIBUAT
         payment: {
           create: {
-            total: parseInt(findProduct.price),
+            total: parseInt(qtyAfterDiscount),
             status: false,
             method: data.method,
           },
@@ -46,6 +73,7 @@ order_controller.post("/order_create/:id", async (req, res) => {
     res.status(201).json({
       success: true,
       msg: "berhasil buat order",
+      query: result,
     });
   } catch (error) {
     res.status(500).json({
@@ -100,7 +128,7 @@ order_controller.put("/order_update/:id", async (req, res) => {
       },
       data: {
         // product_id : parseInt(data.product_id),
-        qty: parseInt(data.qty),
+        // qty: parseInt(data.qty),
         // user_id : parseInt(data.user_id),
         orderStatus: data.orderStatus,
         shipping: data.shipping,

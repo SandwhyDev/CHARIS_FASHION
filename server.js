@@ -20,7 +20,7 @@ env.config();
 
 const app = express();
 const PORT = process.env.PORT;
-const time = moment().format("LTS");
+const time = moment().format("hh:mm:ss");
 
 //middleware
 app.use(cors());
@@ -49,7 +49,7 @@ app.listen(PORT, () => {
 
     > LISTENED TO PORT ${PORT} 
 
-    >> waktu : ${time}
+    >> Waktu : ${time}
 
     `);
 });
