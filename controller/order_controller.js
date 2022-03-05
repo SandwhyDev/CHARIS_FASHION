@@ -94,6 +94,9 @@ order_controller.post("/order_create", async (req, res) => {
 order_controller.get("/order_read", async (req, res) => {
   try {
     const result = await ps.order.findMany({
+      orderBy : {
+        id : "desc"
+      },
       include: {
         payment: true,
       },
