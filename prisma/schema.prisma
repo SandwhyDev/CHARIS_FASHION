@@ -73,6 +73,7 @@ model Categories{
   //relasi
   sub_category                  Sub_Categories?
   product                       Products[]
+
 }
 
 // MODEL SUB_CATEGORIES 
@@ -85,21 +86,24 @@ model Sub_Categories{
 
   //relasi
   category                      Categories    @relation(fields: [category_id], references: [id], onDelete: Cascade)
+  product                       Products[]
 }
 
 // MODEL PRODUCTS 
 model Products{
   id                            Int           @id @default(autoincrement())
-  name                          String
+  name                          String        @unique
   price                         Int
   size                          String
   description                   String
-  category_id                   Int           
+  category_id                   Int   
+  sub_category_id               Int        
   createdAt                     DateTime      @default(now())
   updatedAt                     DateTime      @updatedAt
 
   //relasi
   category                      Categories    @relation(fields: [category_id], references: [id], onDelete: Cascade)
+  sub_category                  Sub_Categories    @relation(fields: [sub_category_id], references: [id], onDelete: Cascade)
 
   product_images                Product_images[]
   product_review                ProductReview[]

@@ -36,7 +36,7 @@ product_controller.post(
           size: data.size,
           description: data.description,
           category_id: parseInt(data.category_id),
-          // sub_category_id: parseInt(data.sub_category_id),
+          sub_category_id: parseInt(data.sub_category_id),
         },
       });
 
