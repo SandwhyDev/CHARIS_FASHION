@@ -12,10 +12,17 @@ order_controller.post("/order_create", async (req, res) => {
       where: {
         id: parseInt(data.product_id),
       },
-      select: {
-        price: true,
+      include: {
+        discount: {
+          select : {
+            id : true,
+            percentage : true
+          }
+        }
       }
     });
+
+    console.log(findProduct.discount.id);
 
     if (!findProduct) {
       res.status(404).json({
@@ -27,7 +34,7 @@ order_controller.post("/order_create", async (req, res) => {
 
     const findDiscount = await ps.discount.findUnique({
       where : {
-        id : parseInt(data.discount_id)
+        id : parseInt(findProduct.discount.id)
       },
       select : {
         percentage : true
@@ -52,7 +59,7 @@ order_controller.post("/order_create", async (req, res) => {
       data: {
         product_id: parseInt(data.product_id),
         qty: parseInt(findProduct.price),
-        // discount : parseInt(findDiscount.percentage),
+        discount : parseInt(findDiscount.percentage),
         qty_after_discount : parseInt(qtyAfterDiscount),
         user_id: parseInt(data.user_id),
         orderStatus: data.orderStatus,
