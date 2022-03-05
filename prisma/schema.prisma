@@ -107,7 +107,7 @@ model Products{
 
   product_images                Product_images[]
   product_review                ProductReview[]
-  discount                      Discount[]
+  discount                      Discount?
   order                         Order[]
 } 
 
@@ -144,31 +144,33 @@ model Discount{
   id                            Int           @id @default(autoincrement())
   product_id                    Int           
   expired                       DateTime?
-  percentage                    Int           @default(0)
+  percentage                    Int?           @default(0)
   createdAt                     DateTime      @default(now())
   updatedAt                     DateTime      @updatedAt
 
   //relasi
   product                       Products      @relation(fields: [product_id], references: [id], onDelete: Cascade)
+  // order                         Order[]
 
 }
 
 // MODEL ORDER 
 model Order{
   id                            Int           @id @default(autoincrement())
+  user_id                       Int   
   product_id                    Int           
   qty                           Int
-  user_id                       Int   
+  discount                     Int
   qty_after_discount            Int
   orderStatus                   String
   shipping                      String
   address                       String
 
+
   //relasi
   product                       Products      @relation(fields: [product_id], references: [id], onDelete: Cascade)
+  // discount                      Discount      @relation(fields: [discount_id], references: [id], onDelete: Cascade)
 
-
-  
   user                          Users         @relation(fields: [user_id], references: [id], onDelete: Cascade)
 
   payment                       Payment[]

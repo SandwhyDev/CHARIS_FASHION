@@ -37,6 +37,13 @@ product_controller.post(
           description: data.description,
           category_id: parseInt(data.category_id),
           sub_category_id: parseInt(data.sub_category_id),
+          discount : {
+            create : {
+              // product_id: parseInt(data.product_id),
+              // expired: data.expired,
+              // percentage: parseInt(data.percentage),
+            }
+          }
         },
       });
 
@@ -98,14 +105,14 @@ product_controller.get("/product_read", async (req, res) => {
             percentage: true,
           },
         },
-        product_images: {
-          select: {
-            id: true,
-            filename: true,
-            mime_type: true,
-            image_path: true,
-          },
-        },
+        // product_images: {
+        //   select: {
+        //     id: true,
+        //     filename: true,
+        //     mime_type: true,
+        //     image_path: true,
+        //   },
+        // },
       },
     });
 

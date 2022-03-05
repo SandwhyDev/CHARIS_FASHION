@@ -76,7 +76,7 @@ discount_controller.put("/discount_update/:id", async (req, res) => {
         id: parseInt(req.params.id),
       },
       data: {
-        product_id: parseInt(data.product_id),
+        // product_id: parseInt(data.product_id),
         expired: data.expired,
         percentage: parseInt(data.percentage),
       },
