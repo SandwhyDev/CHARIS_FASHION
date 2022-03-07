@@ -160,8 +160,9 @@ model Order{
   user_id                       Int   
   product_id                    Int           
   qty                           Int
-  discount                     Int
-  qty_after_discount            Int
+  discount                      Int
+  price                         Int
+  price_after_discount          Int
   orderStatus                   String
   shipping                      String
   address                       String

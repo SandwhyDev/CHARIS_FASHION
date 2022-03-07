@@ -22,7 +22,7 @@ order_controller.post("/order_create", async (req, res) => {
       }
     });
 
-    console.log(findProduct.discount.id);
+    // console.log(findProduct.discount.id);
 
     if (!findProduct) {
       res.status(404).json({
@@ -49,18 +49,20 @@ order_controller.post("/order_create", async (req, res) => {
       return;
     }
 
-    console.log(findDiscount.percentage);
+    // console.log(findDiscount.percentage);
   
+    const qtyPrice = await data.qty * findProduct.price
 
-    const qtyAfterDiscount = await findProduct.price - (findProduct.price * findDiscount.percentage / 100)
+    const priceAfterDiscount = await qtyPrice - (qtyPrice * findDiscount.percentage / 100)
 
-
+    console.log(priceAfterDiscount);
     const result = await ps.order.create({
       data: {
         product_id: parseInt(data.product_id),
-        qty: parseInt(findProduct.price),
+        qty: parseInt(data.qty),
         discount : parseInt(findDiscount.percentage),
-        qty_after_discount : parseInt(qtyAfterDiscount),
+        price : parseInt(qtyPrice),
+        price_after_discount : parseInt(priceAfterDiscount),
         user_id: parseInt(data.user_id),
         orderStatus: data.orderStatus,
         shipping: data.shipping,
@@ -69,7 +71,7 @@ order_controller.post("/order_create", async (req, res) => {
         //PAYMENT LANGSUNG DIBUAT
         payment: {
           create: {
-            total: parseInt(qtyAfterDiscount),
+            total: parseInt(priceAfterDiscount),
             status: false,
             method: data.method,
           },
