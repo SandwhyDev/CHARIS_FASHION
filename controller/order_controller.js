@@ -32,23 +32,6 @@ order_controller.post("/order_create", async (req, res) => {
       return;
     }
 
-    const findDiscount = await ps.discount.findUnique({
-      where : {
-        id : parseInt(findProduct.discount.id)
-      },
-      select : {
-        percentage : true
-      }
-    })
-
-    if (!findDiscount) {
-      res.status(404).json({
-        success: false,
-        msg: "discount tidak ditemukan",
-      });
-      return;
-    }
-
     // console.log(findDiscount.percentage);
   
     const qtyPrice = await data.qty * findProduct.price
